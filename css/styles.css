@@ -39,6 +39,22 @@ html, body {
 }
 .history-item:hover, .history-item.active { background-color: var(--bg-surface); color: var(--text-primary); }
 .history-item-title { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.history-group-label {
+  padding: 14px 10px 5px;
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.history-empty {
+  padding: 12px 10px;
+  color: var(--text-muted);
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+.history-item { min-height: 38px; }
+
 .sidebar-footer { padding-top: 10px; border-top: 1px solid var(--border-subtle); }
 .sidebar-footer-btn {
   width: 100%; display: flex; align-items: center; gap: 10px; padding: 9px 10px;
