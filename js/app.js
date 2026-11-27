@@ -3,8 +3,7 @@ const state = {
   chats: JSON.parse(localStorage.getItem('neonmind_chats') || '[]'),
   activeChatId: null,
   settings: JSON.parse(localStorage.getItem('neonmind_settings') || JSON.stringify({
-    apiEndpoint: '',
-    apiKey: '',
+    apiEndpoint: '/api/chat',
     systemPrompt: 'You are a helpful, concise AI assistant.',
     stream: true
   }))
@@ -169,43 +168,18 @@ function escapeHtml(str) {
 // AI PROVIDER ADAPTER — Wire your existing API call inside sendToAIProvider()
 // ============================================================================
 async function sendToAIProvider(messages, model) {
-  const { apiEndpoint, apiKey, systemPrompt } = state.settings;
+  const { apiEndpoint, systemPrompt } = state.settings;
+  const endpoint = (apiEndpoint || '/api/chat').trim();
 
-  if (apiEndpoint) {
-    const payload = {
-      model,
-      messages: [
-        { role: 'system', content: systemPrompt },
-        ...messages
-      ]
-    };
+  const res = await fetch(endpoint, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ model, messages, systemPrompt })
+  });
 
-    const res = await fetch(apiEndpoint, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        ...(apiKey ? { 'Authorization': `Bearer ${apiKey}` } : {})
-      },
-      body: JSON.stringify(payload)
-    });
-
-    if (!res.ok) throw new Error(`API error: ${res.status}`);
-    const data = await res.json();
-    return data.choices?.[0]?.message?.content || 'No response returned.';
-  }
-
-  await new Promise(r => setTimeout(r, 650));
-  return `Your redesigned **Neonmind AI** interface is live.
-
-To connect your existing AI backend:
-1. Open **Settings** in the bottom-left sidebar and enter your API Endpoint & Key, **or**
-2. Replace `sendToAIProvider()` in `js/app.js` with your existing fetch logic.
-
-```javascript
-// Example integration inside js/app.js
-const response = await yourExistingApiCall(messages, model);
-return response;
-````;
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || `API error: ${res.status}`);
+  return data.choices?.[0]?.message?.content || 'No response returned.';
 }
 
 async function handleSend() {
