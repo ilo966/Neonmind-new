@@ -262,3 +262,49 @@ input:checked + .slider::before { transform: translateX(18px); }
   background: #4a4458;
   color: #f0ebf7;
 }
+
+
+/* Assistant response action toolbar */
+.message-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  position: relative;
+}
+.message-action {
+  min-width: 32px;
+  height: 32px;
+  padding: 0 7px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--text-muted);
+  font: inherit;
+  font-size: 18px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color .15s ease, color .15s ease;
+}
+.message-action svg {
+  width: 19px;
+  height: 19px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.message-action:hover,
+.message-action.selected,
+.message-action.done {
+  color: var(--text-primary);
+  background: var(--bg-surface-hover);
+}
+.message-action.selected { color: var(--accent-primary); }
+@media (max-width: 480px) {
+  .message-actions { gap: 5px; }
+  .message-action { min-width: 30px; height: 32px; padding: 0 5px; }
+}
