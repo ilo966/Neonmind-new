@@ -225,3 +225,40 @@ input:checked + .slider::before { transform: translateX(18px); }
   }
   :root.handed-left .sidebar.mobile-open { transform: translateX(0); }
 }
+
+
+/* Android 16 / Material You expressive surfaces */
+:root[data-theme="material"] .btn-new-chat,
+:root[data-theme="material"] .history-item,
+:root[data-theme="material"] .suggestion-chip,
+:root[data-theme="material"] .btn-primary,
+:root[data-theme="material"] .btn-secondary,
+:root[data-theme="material"] .input-box-container,
+:root[data-theme="material"] .modal-card,
+:root[data-theme="material"] .text-input {
+  border-radius: 22px;
+}
+:root[data-theme="material"] .btn-new-chat,
+:root[data-theme="material"] .suggestion-chip {
+  border-color: var(--border-subtle);
+}
+:root[data-theme="material"] .send-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 16px;
+}
+:root[data-theme="material"] .topbar {
+  height: 64px;
+}
+:root[data-theme="material"] .empty-title {
+  font-size: 26px;
+  letter-spacing: -0.035em;
+}
+:root[data-theme="material"] .input-box-container {
+  padding: 16px;
+  box-shadow: 0 8px 28px rgba(0,0,0,.14);
+}
+:root[data-theme="material"] .history-item.active {
+  background: #4a4458;
+  color: #f0ebf7;
+}
