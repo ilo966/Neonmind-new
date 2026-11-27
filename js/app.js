@@ -199,10 +199,78 @@ function appendMessageElement(role, content, isLoading = false) {
       body.innerHTML = renderMarkdownWithCodeHeaders(content);
     }
     row.appendChild(body);
+    if (!isLoading) {
+      const actions = document.createElement('div');
+      actions.className = 'message-actions';
+      actions.innerHTML = `
+        <button class="message-action" data-action="copy" type="button" title="Copy" aria-label="Copy response">▢</button>
+        <button class="message-action" data-action="like" type="button" title="Good response" aria-label="Good response">♧</button>
+        <button class="message-action" data-action="dislike" type="button" title="Bad response" aria-label="Bad response">♧</button>
+        <button class="message-action" data-action="speak" type="button" title="Read aloud" aria-label="Read aloud">◖))</button>
+        <button class="message-action" data-action="share" type="button" title="Share" aria-label="Share response">↗</button>
+        <button class="message-action" data-action="more" type="button" title="More" aria-label="More actions">⋮</button>`;
+      actions.addEventListener('click', async (event) => {
+        const button = event.target.closest('button[data-action]');
+        if (!button) return;
+        const action = button.dataset.action;
+        if (action === 'copy') {
+          const copied = await copyText(body.innerText);
+          button.textContent = copied ? '✓' : '!';
+          button.title = copied ? 'Copied' : 'Copy failed';
+        } else if (action === 'like' || action === 'dislike') {
+          actions.querySelectorAll('[data-action="like"],[data-action="dislike"]').forEach(b => b.classList.remove('selected'));
+          button.classList.add('selected');
+        } else if (action === 'speak') {
+          if (!('speechSynthesis' in window)) return;
+          if (window.speechSynthesis.speaking) {
+            window.speechSynthesis.cancel();
+            button.classList.remove('selected');
+          } else {
+            const utterance = new SpeechSynthesisUtterance(body.innerText);
+            utterance.onend = () => button.classList.remove('selected');
+            window.speechSynthesis.cancel();
+            window.speechSynthesis.speak(utterance);
+            button.classList.add('selected');
+          }
+        } else if (action === 'share') {
+          if (navigator.share) {
+            try { await navigator.share({ title: 'Neonmind AI response', text: body.innerText }); }
+            catch (err) { if (err.name !== 'AbortError') console.error(err); }
+          } else {
+            const copied = await copyText(body.innerText);
+            button.title = copied ? 'Copied to share' : 'Sharing unavailable';
+          }
+        } else if (action === 'more') {
+          const copied = await copyText(body.innerText);
+          button.title = copied ? 'Copied plain text' : 'Copy failed';
+        }
+      });
+      row.appendChild(actions);
+    }
   }
 
   els.messagesContainer.appendChild(row);
   return row;
+}
+
+async function copyText(text) {
+  try {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(text);
+      return true;
+    }
+  } catch (error) {}
+  try {
+    const field = document.createElement('textarea');
+    field.value = text;
+    field.style.position = 'fixed';
+    field.style.opacity = '0';
+    document.body.appendChild(field);
+    field.select();
+    const copied = document.execCommand('copy');
+    field.remove();
+    return copied;
+  } catch (error) { return false; }
 }
 
 function scrollToBottom() {
