@@ -29,7 +29,6 @@ const els = {
   closeSettingsBtn: document.getElementById('closeSettingsBtn'),
   saveSettingsBtn: document.getElementById('saveSettingsBtn'),
   apiEndpointInput: document.getElementById('apiEndpointInput'),
-  apiKeyInput: document.getElementById('apiKeyInput'),
   systemPromptInput: document.getElementById('systemPromptInput'),
   streamToggle: document.getElementById('streamToggle')
 };
