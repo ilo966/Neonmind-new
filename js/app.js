@@ -95,6 +95,8 @@ function createNewChat() {
   const chat = {
     id: 'chat_' + Date.now(),
     title: 'New conversation',
+    createdAt: Date.now(),
+    updatedAt: Date.now(),
     messages: []
   };
   state.chats.unshift(chat);
@@ -107,18 +109,49 @@ function createNewChat() {
 
 function renderHistory() {
   els.chatHistoryList.innerHTML = '';
+  const now = Date.now();
+  const day = 24 * 60 * 60 * 1000;
+  const groups = [
+    { label: 'Today', chats: [] },
+    { label: 'Previous 7 days', chats: [] },
+    { label: 'Older', chats: [] }
+  ];
+
+  state.chats.sort((a, b) => (b.updatedAt || b.createdAt || 0) - (a.updatedAt || a.createdAt || 0));
   state.chats.forEach(chat => {
-    const btn = document.createElement('button');
-    btn.className = `history-item ${chat.id === state.activeChatId ? 'active' : ''}`;
-    btn.innerHTML = `<span class="history-item-title">${escapeHtml(chat.title)}</span>`;
-    btn.onclick = () => {
-      state.activeChatId = chat.id;
-      renderHistory();
-      renderMessages();
-      closeMobileSidebar();
-    };
-    els.chatHistoryList.appendChild(btn);
+    const age = now - (chat.updatedAt || chat.createdAt || now);
+    const group = age < day ? groups[0] : age < 7 * day ? groups[1] : groups[2];
+    group.chats.push(chat);
   });
+
+  groups.forEach(group => {
+    if (!group.chats.length) return;
+    const heading = document.createElement('div');
+    heading.className = 'history-group-label';
+    heading.textContent = group.label;
+    els.chatHistoryList.appendChild(heading);
+
+    group.chats.forEach(chat => {
+      const btn = document.createElement('button');
+      btn.className = `history-item ${chat.id === state.activeChatId ? 'active' : ''}`;
+      btn.type = 'button';
+      btn.innerHTML = `<span class="history-item-title">${escapeHtml(chat.title || 'New conversation')}</span>`;
+      btn.onclick = () => {
+        state.activeChatId = chat.id;
+        renderHistory();
+        renderMessages();
+        closeMobileSidebar();
+      };
+      els.chatHistoryList.appendChild(btn);
+    });
+  });
+
+  if (!state.chats.length) {
+    const empty = document.createElement('div');
+    empty.className = 'history-empty';
+    empty.textContent = 'Your conversations will appear here';
+    els.chatHistoryList.appendChild(empty);
+  }
 }
 
 function renderMessages() {
@@ -199,6 +232,7 @@ async function handleSend() {
   }
 
   chat.messages.push({ role: 'user', content: text });
+  chat.updatedAt = Date.now();
   saveChats();
   renderHistory();
   els.emptyState.style.display = 'none';
@@ -216,7 +250,9 @@ async function handleSend() {
     const reply = await sendToAIProvider(chat.messages, els.modelSelect.value);
     loadingRow.remove();
     chat.messages.push({ role: 'assistant', content: reply });
+    chat.updatedAt = Date.now();
     saveChats();
+    renderHistory();
     appendMessageElement('assistant', reply);
   } catch (err) {
     loadingRow.remove();
