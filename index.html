@@ -88,6 +88,31 @@
       </div>
       <div class="modal-body">
         <div class="setting-group">
+          <label for="themeSelect">Appearance theme</label>
+          <select id="themeSelect" class="text-input">
+            <option value="dark">Dark</option>
+            <option value="light">Light</option>
+            <option value="oled">OLED black</option>
+            <option value="ocean">Ocean blue</option>
+          </select>
+        </div>
+        <div class="setting-group">
+          <label for="handednessSelect">Sidebar position</label>
+          <select id="handednessSelect" class="text-input">
+            <option value="right">Right-handed (sidebar left)</option>
+            <option value="left">Left-handed (sidebar right)</option>
+          </select>
+          <p class="setting-help">Choose which side the chat history opens from.</p>
+        </div>
+        <div class="setting-group update-setting">
+          <div>
+            <div class="setting-label">App updates</div>
+            <div class="setting-help">Check the latest Neonmind version on GitHub.</div>
+          </div>
+          <button id="checkUpdatesBtn" class="btn-secondary" type="button">Check for updates</button>
+        </div>
+
+        <div class="setting-group">
           <label for="apiEndpointInput">API Endpoint URL</label>
           <input type="text" id="apiEndpointInput" class="text-input" placeholder="https://api.example.com/v1/chat/completions" />
           <p class="setting-help">Use /api/chat for Vercel, or enter your deployed Vercel API URL in the Android app.</p>
