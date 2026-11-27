@@ -65,3 +65,25 @@
   --text-primary: #e7f3fb; --text-secondary: #a8c1d4; --text-muted: #7895aa;
   --accent-primary: #7dd3fc; --accent-primary-fg: #082032;
 }
+
+
+/* Material You inspired dynamic tonal palette */
+:root[data-theme="material"] {
+  --bg-app: #141218;
+  --bg-sidebar: #1d1b22;
+  --bg-surface: #292630;
+  --bg-surface-hover: #35313d;
+  --bg-user-bubble: #4a4458;
+  --bg-code: #17151c;
+  --bg-code-header: #24212b;
+  --border-subtle: rgba(230, 222, 248, .12);
+  --border-focus: rgba(210, 190, 255, .42);
+  --text-primary: #f0ebf7;
+  --text-secondary: #c9c1d5;
+  --text-muted: #9b93a7;
+  --accent-primary: #d0bcff;
+  --accent-primary-fg: #381e72;
+  --radius-sm: 14px;
+  --radius-md: 20px;
+  --radius-lg: 28px;
+}
