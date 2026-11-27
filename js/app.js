@@ -1,13 +1,19 @@
 // Neonmind AI — Clean UI Controller & Adapter Layer
+const API_ENDPOINT = 'https://neonmindnewai.vercel.app/api/chat';
+
 const state = {
   chats: JSON.parse(localStorage.getItem('neonmind_chats') || '[]'),
   activeChatId: null,
   settings: JSON.parse(localStorage.getItem('neonmind_settings') || JSON.stringify({
-    apiEndpoint: '/api/chat',
+    apiEndpoint: API_ENDPOINT,
     systemPrompt: 'You are a helpful, concise AI assistant.',
     stream: true
   }))
 };
+
+if (!state.settings.apiEndpoint || state.settings.apiEndpoint === '/api/chat') {
+  state.settings.apiEndpoint = API_ENDPOINT;
+}
 
 // DOM Elements
 const els = {
@@ -274,7 +280,6 @@ document.querySelectorAll('.suggestion-chip').forEach(chip => {
 // Settings Modal
 els.openSettingsBtn.addEventListener('click', () => {
   els.apiEndpointInput.value = state.settings.apiEndpoint || '';
-  els.apiKeyInput.value = state.settings.apiKey || '';
   els.systemPromptInput.value = state.settings.systemPrompt || '';
   els.streamToggle.checked = state.settings.stream !== false;
   els.settingsModal.hidden = false;
@@ -287,7 +292,6 @@ els.closeSettingsBtn.addEventListener('click', () => {
 els.saveSettingsBtn.addEventListener('click', () => {
   state.settings = {
     apiEndpoint: els.apiEndpointInput.value.trim(),
-    apiKey: els.apiKeyInput.value.trim(),
     systemPrompt: els.systemPromptInput.value.trim(),
     stream: els.streamToggle.checked
   };
