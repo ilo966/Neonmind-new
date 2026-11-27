@@ -89,7 +89,7 @@ function renderMarkdownWithCodeHeaders(markdownText) {
 
 // Chat State Management
 function applyPreferences() {
-  const theme = ['dark', 'light', 'oled', 'ocean'].includes(state.settings.theme) ? state.settings.theme : 'dark';
+  const theme = ['dark', 'light', 'oled', 'ocean', 'material'].includes(state.settings.theme) ? state.settings.theme : 'dark';
   const handedness = state.settings.handedness === 'left' ? 'left' : 'right';
   document.documentElement.dataset.theme = theme;
   document.documentElement.dataset.handedness = handedness;
