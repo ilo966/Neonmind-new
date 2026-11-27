@@ -7,7 +7,9 @@ const state = {
   settings: JSON.parse(localStorage.getItem('neonmind_settings') || JSON.stringify({
     apiEndpoint: API_ENDPOINT,
     systemPrompt: 'You are a helpful, concise AI assistant.',
-    stream: true
+    stream: true,
+    theme: 'dark',
+    handedness: 'right'
   }))
 };
 
@@ -36,7 +38,10 @@ const els = {
   saveSettingsBtn: document.getElementById('saveSettingsBtn'),
   apiEndpointInput: document.getElementById('apiEndpointInput'),
   systemPromptInput: document.getElementById('systemPromptInput'),
-  streamToggle: document.getElementById('streamToggle')
+  streamToggle: document.getElementById('streamToggle'),
+  themeSelect: document.getElementById('themeSelect'),
+  handednessSelect: document.getElementById('handednessSelect'),
+  checkUpdatesBtn: document.getElementById('checkUpdatesBtn')
 };
 
 // Configure Marked & Highlight.js
@@ -83,6 +88,14 @@ function renderMarkdownWithCodeHeaders(markdownText) {
 }
 
 // Chat State Management
+function applyPreferences() {
+  const theme = ['dark', 'light', 'oled', 'ocean'].includes(state.settings.theme) ? state.settings.theme : 'dark';
+  const handedness = state.settings.handedness === 'left' ? 'left' : 'right';
+  document.documentElement.dataset.theme = theme;
+  document.documentElement.dataset.handedness = handedness;
+  document.documentElement.classList.toggle('handed-left', handedness === 'left');
+}
+
 function saveChats() {
   localStorage.setItem('neonmind_chats', JSON.stringify(state.chats));
 }
@@ -318,6 +331,8 @@ els.openSettingsBtn.addEventListener('click', () => {
   els.apiEndpointInput.value = state.settings.apiEndpoint || '';
   els.systemPromptInput.value = state.settings.systemPrompt || '';
   els.streamToggle.checked = state.settings.stream !== false;
+  els.themeSelect.value = state.settings.theme || 'dark';
+  els.handednessSelect.value = state.settings.handedness || 'right';
   els.settingsModal.hidden = false;
 });
 
@@ -329,11 +344,20 @@ els.saveSettingsBtn.addEventListener('click', () => {
   state.settings = {
     apiEndpoint: els.apiEndpointInput.value.trim(),
     systemPrompt: els.systemPromptInput.value.trim(),
-    stream: els.streamToggle.checked
+    stream: els.streamToggle.checked,
+    theme: els.themeSelect.value,
+    handedness: els.handednessSelect.value
   };
   localStorage.setItem('neonmind_settings', JSON.stringify(state.settings));
+  applyPreferences();
   els.settingsModal.hidden = true;
 });
+
+els.checkUpdatesBtn.addEventListener('click', () => {
+  window.open('https://github.com/ilo966/Neonmind-new/releases', '_blank', 'noopener');
+});
+
+applyPreferences();
 
 // Init
 if (state.chats.length > 0) {
