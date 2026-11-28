@@ -308,3 +308,59 @@ input:checked + .slider::before { transform: translateX(18px); }
   .message-actions { gap: 5px; }
   .message-action { min-width: 30px; height: 32px; padding: 0 5px; }
 }
+
+
+/* Floating in-app phone assistant */
+.floating-assistant-btn {
+  position: fixed;
+  right: 18px;
+  bottom: 104px;
+  z-index: 70;
+  width: 54px;
+  height: 54px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 20px;
+  background: var(--accent-primary);
+  color: var(--accent-primary-fg);
+  box-shadow: 0 8px 28px rgba(0,0,0,.28);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+.floating-assistant-btn svg { width: 25px; height: 25px; fill: currentColor; }
+.assistant-panel {
+  position: fixed;
+  right: 16px;
+  bottom: 170px;
+  z-index: 71;
+  width: min(340px, calc(100vw - 32px));
+  padding: 16px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 22px;
+  background: var(--bg-sidebar);
+  color: var(--text-primary);
+  box-shadow: 0 14px 42px rgba(0,0,0,.34);
+}
+.assistant-panel[hidden] { display: none; }
+.assistant-panel-header { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.assistant-panel-header strong { display:block; font-size:15px; }
+.assistant-panel-header span { display:block; color:var(--text-muted); font-size:12px; }
+.assistant-panel-note { margin:12px 0; color:var(--text-secondary); font-size:12.5px; line-height:1.5; }
+.assistant-quick-actions { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.assistant-quick-actions button {
+  min-height:40px; padding:8px 10px; border:1px solid var(--border-subtle);
+  border-radius:12px; background:var(--bg-surface); color:var(--text-primary);
+  font:inherit; font-size:12.5px; cursor:pointer;
+}
+.assistant-quick-actions button:last-child { grid-column:1 / -1; }
+.assistant-panel-status {
+  margin-top:12px; padding:10px 12px; border-radius:12px;
+  background:var(--bg-surface); color:var(--text-secondary); font-size:12px;
+  min-height:38px;
+}
+:root.handed-left .floating-assistant-btn { right:auto; left:18px; }
+:root.handed-left .assistant-panel { right:auto; left:16px; }
+@media (max-width:480px) {
+  .floating-assistant-btn { bottom:98px; }
+  .assistant-panel { bottom:160px; }
+}
