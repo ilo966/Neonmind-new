@@ -41,7 +41,14 @@ const els = {
   streamToggle: document.getElementById('streamToggle'),
   themeSelect: document.getElementById('themeSelect'),
   handednessSelect: document.getElementById('handednessSelect'),
-  checkUpdatesBtn: document.getElementById('checkUpdatesBtn')
+  checkUpdatesBtn: document.getElementById('checkUpdatesBtn'),
+  floatingAssistantBtn: document.getElementById('floatingAssistantBtn'),
+  assistantPanel: document.getElementById('assistantPanel'),
+  closeAssistantPanel: document.getElementById('closeAssistantPanel'),
+  voiceAssistantBtn: document.getElementById('voiceAssistantBtn'),
+  batteryAssistantBtn: document.getElementById('batteryAssistantBtn'),
+  askAssistantBtn: document.getElementById('askAssistantBtn'),
+  assistantPanelStatus: document.getElementById('assistantPanelStatus')
 };
 
 // Configure Marked & Highlight.js
